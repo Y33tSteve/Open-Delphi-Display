@@ -1,5 +1,5 @@
-/*=========  Va&Cob OBD2 Gauge ==========
-Programmed:  by Ratthanin W.
+/*=========  Open-Delphi-Display ==========
+Fork of original program by Ratthanin W.
 Hardware:
 - Hardware 2.8" TFT ESP32 LVGL https://www.youtube.com/watch?v=d2OXlVcRYrU
 Configuration:
