@@ -1,41 +1,33 @@
-# ESP32-OBD2-Gauge
-A fully functional code-updated
-Last Update: August 23rd, 2024
+# Open-Delphi-Display
+Thanks to the original developer for creating the original code that sprung this project!!!
 
-This is ESP32 OBD2 Gauge for vehicles that are compatible with obd2
-(Special made for FORD vehicle)
- - Prototype https://youtu.be/PkQaUJbzTNM
- - Current Model Short Demo https://youtu.be/vvBIeim7XTE
- - 
-![](/picture/page.jpg)
-![](/picture/config.jpg)
+Current status: In progress - Please do not load the existing code until official release!
+
+This is a fork designed specifically for Open-Delphi support. This is designed (currently) for P01/P59 ECU's, standard in most LS swaps and 97-2008(ish) vehicles. 
+
+Mapping for the newer ECU architectures will come, along with additional features and benefits as it integrates into the Open-Delphi tuning platform
+
+## Open-Delphi-Display Features:
+- Generic 0-5v Analog sensor input support
+- Wideband Display support
+- Flex Fuel % Display
+- Vehicle Controls:
+  - Fan On/Off Command
+  - Lockup Control
+- More to come
 
 ## Software:
 - Arduino IDE 2.3.2 + ESP32 arduino core 2.0.17
 - modified TFT_eSPI library 2.5.43
 
-## Hardware
-- ESP32 TFT2.8 320x240 with "RESISTIVE" touch board.
-buy here  https://s.click.aliexpress.com/e/_DB8Ht8N
-- ELM327 Bluetooth adaptor (recommended v1.5 not v2.1)
-  Highly recommend ELM327 Bluetooth  adaptor https://s.click.aliexpress.com/e/_oo3THvG
-- A small speaker for mobile phone 1Watt
-- A push button 6x6x5 2 legs
-- Aluminium Case Cover/Plastic Enclosure
-
+## Minimum Requirements
+- ESP32-Wroom TFT 2.8 320x240
+- ELM327 Bluetooth adapter
+- Speaker (if desired)
+- Push Button (2 Pole)
 - 12v to 5v dc micro usb power regulator module
-- Gauge magnetic stand
-
-## Features:
-- Show vehicle data 7 pids
-* MAP - manifold air pressure (PSI)
-* PCM - pcm voltage (volt)
-* ENG LOAD - engine load (%)
-* ENG SPD - engine speed (RPM)
-* Coolant - coolant temperature (c)
-* Oil Temp - engine oil temperature (c)
-* TFT - Ford transmission fluid temperature (c)
-
+  
+## Original Features:
 - 8 layout page selectable display
 - DTC read and clear function (Engine warning light only)
 - Warning when parameter reaches setting value
@@ -46,5 +38,3 @@ buy here  https://s.click.aliexpress.com/e/_DB8Ht8N
 - Change off screen to user screen with micro SDcard
 - Firmware updatable (micro SDcard and WiFi)
 - VIN Read on the About page.
-
-## [☕ Buy me coffee](https://skrill.me/rq/Ratthanin/3/USD?key=9xxRSRSGTivUI4rPpFKoexxzOLN)
