@@ -75,21 +75,31 @@ skip = delay reading 0 - 3; 3 = max delay read
 digit = want to show digit or not
 warn = default warning value
 */
-const String pidConfig[7][9] = {
-  //[pid][data]
-  { "ENG Load", "%", "0104", "2", "0", "100", "0", "0", "80" },     //0 = 0104
-  { "Coolant", "`C", "0105", "1", "0", "120", "3", "0", "99" },     //1 = 0105
-  { "MAP", "psi", "010B", "0", "0", "40", "0", "1", "35" },         //2 = 010B
-  { "ENG Speed", "rpm", "010C", "3", "0", "5000", "0", "0", "4000" }, //3 = 010C
-  { "PCM Volt", "volt", "0142", "4", "0", "16", "1", "1", "15" },   //4 = 0142
-  { "Oil Temp", "`C", "015C", "1", "0", "120", "3", "0", "99" },    //5 = 015C
-  { "Trans Temp", "`C", "221E1C", "5", "0", "120", "3", "1", "99" } //6 = 221E1C for FORD T6
-  //{ "Trans Temp", "`C", "221674", "6", "0", "120", "3", "1", "99" } //6 = 221674 for FORD T5
+const String pidConfig[6][9] = {
+  // [Label, Unit, PID, Formula Index, Min, Max, Skip, Digit, Warn]
+  { "ECT", "°F", "0005", "1", "-40", "260", "0", "0", "212" },      // ECT Sensor, PID 0005, °F, Formula: (x-40) * 1.8 + 32.0
+  { "AFR", "AFR", "114B", "6", "7.4", "22.4", "0", "1", "16.5" },   // Updated EGR Sensor to Wideband AFR
+  { "RPM", "RPM", "000C", "3", "0", "8000", "0", "0", "6000" },   // Engine Speed, PID 000C, RPM, Formula: x*0.25
+  { "Fuel Pressure", "PSI", "114E", "0", "100", "5", "0", "1", "45" }, // Fuel Tank Pressure Sensor Voltage, PID 114E, Volts, Formula: x/51
+  { "Timing", "°", "000E", "4", "-64", "63.5", "0", "0", "35" },   // Ignition Timing, PID 000E, Degrees, Formula: (x/2)-64
+  { "MAP", "kPa", "000B", "5", "0", "100", "0", "1", "100" }        // MAP Sensor, PID 000B, kPa, Formula: x
 };
 
+// const String pidConfig[7][9] = {
+  //[pid][data]
+  //{ "ENG Load", "%", "0104", "2", "0", "100", "0", "0", "80" },     //0 = 0104
+  //{ "Coolant", "`C", "0105", "1", "0", "120", "3", "0", "99" },     //1 = 0105
+  //{ "MAP", "psi", "010B", "0", "0", "40", "0", "1", "35" },         //2 = 010B
+  //{ "ENG Speed", "rpm", "010C", "3", "0", "5000", "0", "0", "4000" }, //3 = 010C
+  //{ "PCM Volt", "volt", "0142", "4", "0", "16", "1", "1", "15" },   //4 = 0142
+  //{ "Oil Temp", "`C", "015C", "1", "0", "120", "3", "0", "99" },    //5 = 015C
+  //{ "Trans Temp", "`C", "221E1C", "5", "0", "120", "3", "1", "99" } //6 = 221E1C for FORD T6
+  //{ "Trans Temp", "`C", "221674", "6", "0", "120", "3", "1", "99" } //6 = 221674 for FORD T5
+//};
+
 //barometric pressure "0133"  turbo boost = map - bp;
-//hold warning value
-String warningValue[7] = {"80","99","35","4000","15","99","99"};
+//String to hold warning values - Update to match based on the pidConfig above last value
+String warningValue[7] = {"212","16.5","6000","45","35","100"};
 
 /*  User configuration here to change display 
       layout 0      layout 1       layout 2     layout 3      layout 4     layout 5
@@ -97,7 +107,15 @@ String warningValue[7] = {"80","99","35","4000","15","99","99"};
     █ 2 █ █ 8 █   █ 2 █  3  4    1  █ 5 █  4   1  2  █ 8 █   1  2  3  4   1  2  3  4
     █ 3 █ █ 9 █   █ 3 █  █  █    █  █ 6 █  █   █  █  █ 9 █   █  █  █  █   █  █  █  █
 
-set up meter here which pid to use on each cell
+New Sensor Definitions
+0 - ECT Sensor
+1 - Wideband AFR (formerly EGR Sensor)
+2 - Engine Speed (RPM)
+3 - Fuel Pressure (formerly Fuel Tank Pressure Sensor)
+4 - Ignition Timing
+5 - MAP Sensor
+
+(old) set up meter here which pid to use on each cell
 0 - engine load
 1 - coolant
 2 - manifold Pressure
@@ -105,18 +123,31 @@ set up meter here which pid to use on each cell
 4 - pcm volt
 5 - oil Temp
 6 - trans Temp
+
 */
-const uint8_t pidInCell[8][7] = { //[layout][cellNo] 
-//the last cell must be 3 (engine speed) to check engine off
-  {0,2,3,1,5,6,4},//layout 0 -> 6 cell {load,map,engspd,coolant,oil,tft,pcmvolt 
-  {0,2,3,1,5,6,4},//layout 1 -> 6 cell {load,map,engspd,coolant,oil,tft,pcmvolt 
-  {0,2,3,1,5,6,4},//layout 2 -> 6 cell {load,map,engspd,coolant,oil,tft,pcmvolt 
-  {1,5,6,3,2,4,4},//layout 3 -> 5 cell {cooland,oil,tft,map,pcmvolt,pcmvolt}
-  {2,1,5,6,4,0,4},//layout 4 -> 5 cell {MAP,coolant,oiltemp,tft,pcmvolt,load,pcmvolt}
-  {2,0,1,5,6,4,4},//layout 5 -> 5 cell {MAP,engload,coolant,oiltemp,tft,engload,rpm}
-  {1,5,6,4,0,3,4},//layout 6 -> 4 cell {coolant,oiltemp,tft,pcmvolt,map,endspd,pcmvolt}
-  {3,2,0,4,1,5,4},//layout 7 -> 4 cell {engspd,map,engload,pcmvolt,coolant,oil,pcmvolt}  
+
+const uint8_t pidInCell[8][7] = { 
+  // Each row corresponds to a layout configuration and each element to a cell in that layout.
+  {0, 5, 2, 1, 4, 3, 3}, // layout 0 -> 6 cells {ECT, MAP, RPM, AFR, Timing, Fuel Pressure, Fuel Pressure}
+  {0, 5, 2, 1, 4, 3, 3}, // layout 1 -> 6 cells {ECT, MAP, RPM, AFR, Timing, Fuel Pressure, Fuel Pressure}
+  {0, 5, 2, 1, 4, 3, 3}, // layout 2 -> 6 cells {ECT, MAP, RPM, AFR, Timing, Fuel Pressure, Fuel Pressure}
+  {1, 3, 4, 2, 5, 3, 3}, // layout 3 -> 5 cells {AFR, Fuel Pressure, Timing, RPM, MAP, Fuel Pressure, Fuel Pressure}
+  {5, 0, 3, 1, 2, 4, 3}, // layout 4 -> 5 cells {MAP, ECT, Fuel Pressure, AFR, RPM, Timing, Fuel Pressure}
+  {5, 2, 0, 1, 3, 4, 3}, // layout 5 -> 5 cells {MAP, RPM, ECT, AFR, Fuel Pressure, Timing, Fuel Pressure}
+  {1, 3, 5, 0, 4, 2, 3}, // layout 6 -> 4 cells {AFR, Fuel Pressure, MAP, ECT, Timing, RPM, Fuel Pressure}
+  {2, 5, 0, 3, 1, 4, 3}  // layout 7 -> 4 cells {RPM, MAP, ECT, Fuel Pressure, AFR, Timing, Fuel Pressure}
 };
+//const uint8_t pidInCell[8][7] = { //[layout][cellNo] 
+//the last cell must be 3 (engine speed) to check engine off
+//  {0,2,3,1,5,6,4},//layout 0 -> 6 cell {load,map,engspd,coolant,oil,tft,pcmvolt 
+// {0,2,3,1,5,6,4},//layout 1 -> 6 cell {load,map,engspd,coolant,oil,tft,pcmvolt 
+//  {0,2,3,1,5,6,4},//layout 2 -> 6 cell {load,map,engspd,coolant,oil,tft,pcmvolt 
+//  {1,5,6,3,2,4,4},//layout 3 -> 5 cell {cooland,oil,tft,map,pcmvolt,pcmvolt}
+//  {2,1,5,6,4,0,4},//layout 4 -> 5 cell {MAP,coolant,oiltemp,tft,pcmvolt,load,pcmvolt}
+//  {2,0,1,5,6,4,4},//layout 5 -> 5 cell {MAP,engload,coolant,oiltemp,tft,engload,rpm}
+//  {1,5,6,4,0,3,4},//layout 6 -> 4 cell {coolant,oiltemp,tft,pcmvolt,map,endspd,pcmvolt}
+//  {3,2,0,4,1,5,4},//layout 7 -> 4 cell {engspd,map,engload,pcmvolt,coolant,oil,pcmvolt}  
+//};
 // User configuration here to change display  >
 
 /*---------------------------*/
