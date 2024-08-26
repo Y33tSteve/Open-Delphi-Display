@@ -19,7 +19,7 @@ Cartridge player(BUZZER_PIN);//not specified 4 pin , use 1 pin at buzzer pin
 
 //configuration menu 
 const String menuList[8] = {
-  "Show pid/s & CPU Temp",//toggle show system
+  "Show PID/s & CPU Temp",//toggle show system
   "Load my pic 320x240 px",//load user own pic
   "Update firmware",//update new firmware
   "Warning setting",//setting warning parameter (warning data, offset temp)
@@ -46,16 +46,16 @@ const String parameterList[8][2] = {
 const int pidWarnStep[8] = {1,5,1,5,500,1,1,1};
 
 //------ NES Audio play on Task0
-TaskHandle_t TaskHandle0 = NULL;//create taskhandle0
+//TaskHandle_t TaskHandle0 = NULL;//create taskhandle0
 
-void TaskPlayMusic(void *pvParameters) {
-  esp_task_wdt_init(62, false);//62 sec wd timer / disable wd
-  while(1) {
+//void TaskPlayMusic(void *pvParameters) {
+  //esp_task_wdt_init(62, false);//62 sec wd timer / disable wd
+  //while(1) {
  // player.frame_counter_cb(danceLight);//cal back fucntion (not use)
-  player.play_nes(song , true, 0.25); //play nes music, loop, volume 0.25, <lower vol lower distortion>
+  //player.play_nes(song , true, 0.25); //play nes music, loop, volume 0.25, <lower vol lower distortion>
  
-  }
-}
+//  }
+//}
 //----------------------------
 void animation() {//start field effect
 // Clear the Screen
@@ -551,9 +551,9 @@ dtcRead = "00E 0: 43 06 00 7D C6 93 1: 01 08 C6 0F 02 E9 02 2: E0 CC CC CC CC CC
            tft.setTextColor(TFT_WHITE,TFT_BLACK);
            tft.drawString("Gauge Auto-off Setting",40,30,4);
            tft.setTextColor(TFT_WHITE,TFT_BLACK);           
-           tft.drawString("Set detection PCM voltage to turn off gauge.",10,65,2);
-           tft.drawString("If gauge turn off while the engnine is running",10,85,2);
-           tft.drawString("Please lower down the voltage",10,105,2);
+           tft.drawString("Minimum PCM Voltage to auto-off",10,65,2);
+           tft.drawString("If the gauge turns off while running",10,85,2);
+           tft.drawString("please lower voltage threshold",10,105,2);
            tft.drawString("Volt",220,135,4);
            tft.setTextColor(TFT_BLACK,TFT_WHITE);
            tft.drawCentreString("[- Press button to exit -]",159,180,4); 
