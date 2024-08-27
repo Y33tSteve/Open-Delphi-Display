@@ -104,14 +104,20 @@ void animation() {//start field effect
   tft.setTextColor(TFT_CYAN); 
   String txt = "[ "+serial_no+" ] BUILD : "+compile_date;
   tft.drawString(txt,0,0,2);
-  //get VIN
-  getPID("ATE0");//force echo off
-  txt = "VIN :  " + getVIN(getPID("0902"));
-  tft.setTextColor(TFT_GREENYELLOW); 
-  tft.drawString(txt,0,20,2);
+
+  // Get and display the VIN
+  // Force Echo Off
+  getPID("ATE0");   
+  String vin = retrieveVIN(); // Call retrieveVIN() to get the assembled VIN
+  String txt = "VIN : " + vin; // Concatenate the "VIN: " label with the retrieved VIN
+  Serial.println(txt); // Print the VIN to the Serial Monitor
+  
+  // Display the VIN on the TFT screen
+  tft.setTextColor(TFT_GREENYELLOW); // Set the text color to green-yellow
+  tft.drawString(txt, 0, 20, 2); // Draw the text on the TFT at coordinates (0, 20) with font size 2
 
   bk.setTextColor(TFT_BLACK,TFT_ORANGE);
-//loop draw Animation
+  //loop draw Animation
   while (digitalRead(SELECTOR_PIN) == HIGH) {//exit if press button
 
   //draw road
