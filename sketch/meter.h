@@ -455,15 +455,20 @@ void updateMeter(uint8_t pidNo, String response) {
  
   float data = 0.0;
   // Apply the appropriate formula based on the formula index
+  // J1850VPW Definitions
   switch (formula) { 
-    case 0: data = A * 0.145; break;  //PSI Formula
+    case 0: data = A; break;  //MAP KPA formula
     case 1: data = A - 40; break;     //Temperature Formula
     case 2: data = A * 100.0 / 255; break; // Engine Load Percentage Formula 0-100%
-    case 3: data = (256 * A + B) / 4.0; break; // RPM Formula
+    case 3: data = A * 0.25; break; // RPM Formula
     case 4: data = (256 * A + B) / 1000.0; break; // Voltage Formula
-    case 5: data = (256 * A + B) / 16.0; break; // Trans Temp
-    case 6: data = (256 * A + B) / 8.0; break; // Trans Temp
-    case 7: data = (A / 2.0) - 64; break;  // Formula for Ignition Timing
+    case 5: data = ((A - 40) * 1.8) + 32.0; break;  // ECT/IAT in Farenheit
+    case 6: data = (A / 2.0) - 64; break;  // Formula for Ignition Timing
+    case 7: { // Formula for Voltage from ATRV response
+      response.replace("V", "");  // Remove the "V" character from the response
+      data = response.toFloat();  // Convert the numeric part to float
+      break; 
+    }
     // add additional formulas here for PID/Input conversions
   }  //switch formula
 
