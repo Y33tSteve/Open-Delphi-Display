@@ -1,6 +1,7 @@
+// Function to retrieve the complete VIN
 String retrieveVIN() {
   // Step 1: Request PID 0902 to get the total number of frames needed for the VIN
-  String response0902 = getPID(0x0902); // Assuming getPID() sends the request and returns the response
+  String response0902 = getPID("0902"); // Ensure the argument is a string "0902"
   response0902.trim();
   
   // Step 2: Parse the response to get the number of messages
@@ -19,7 +20,7 @@ String retrieveVIN() {
   // Step 3: Request PID 0904 to get the actual VIN
   String completeVIN = "";
   for (int i = 0; i < frameCount; i++) {
-    String response0904 = getPID(0x0904); // Request PID 0904
+    String response0904 = getPID("0904"); // Request PID 0904
     response0904.trim();
     
     // Step 4: Parse the response from PID 0904
@@ -37,7 +38,7 @@ String retrieveVIN() {
   }
 }
 
-// Updated getVIN function to parse the response from PID 0904
+// Helper function to parse the response from PID 0904
 String getVIN(String elm_rsp) {
   String VIN = "";
   elm_rsp.trim();
