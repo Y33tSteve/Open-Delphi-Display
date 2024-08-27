@@ -21,7 +21,6 @@ Important Note:
 
 //Intermal temperature sensor function declaration
 #ifdef __cplusplus
-#ifdef __cplusplus
 extern "C" {
 #endif
 uint8_t temprature_sens_read();
