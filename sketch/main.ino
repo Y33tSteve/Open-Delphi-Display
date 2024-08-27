@@ -84,7 +84,7 @@ const String pidConfig[7][9] = {
   { "RPM", "rpm", "010C", "3", "0", "7000", "0", "0", "5000" }, //3 = 010C
   { "Volts", "volt", "ATRV", "4", "0", "16", "1", "1", "15" },   // ATRV value from ELM327 Device
   { "Fuel Pressure", "PSI", "114E", "0", "0", "100", "0", "1", "45" }, // Fuel Tank Pressure Sensor Voltage, PID 114E, Volts, Formula: x/51
-  { "Timing", "°", "010E", "4", "-64", "63.5", "0", "0", "35" },   // Ignition Timing, PID 000E, Degrees, Formula: (x/2)-64
+  { "Timing", "°", "010E", "7", "-64", "63.5", "0", "0", "35" },   // Ignition Timing, PID 000E, Degrees, Formula: (x/2)-64
   //{ "Trans Temp", "`C", "221674", "6", "0", "120", "3", "1", "99" } //6 = 221674 for FORD T5
 };
 
