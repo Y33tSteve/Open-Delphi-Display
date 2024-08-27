@@ -19,7 +19,7 @@ Cartridge player(BUZZER_PIN);//not specified 4 pin , use 1 pin at buzzer pin
 
 //configuration menu 
 const String menuList[8] = {
-  "Show PID/s & CPU Temp",//toggle show system
+  "Show pid/s & CPU Temp",//toggle show system
   "Load my pic 320x240 px",//load user own pic
   "Update firmware",//update new firmware
   "Warning setting",//setting warning parameter (warning data, offset temp)
@@ -45,33 +45,65 @@ const String parameterList[8][2] = {
 //increasement and decreasement of each PID  
 const int pidWarnStep[8] = {1,5,1,5,500,1,1,1};
 
-//------ NES Audio play on Task0
-//TaskHandle_t TaskHandle0 = NULL;//create taskhandle0
+//Sprites
+TFT_eSprite car = TFT_eSprite(&tft);
+TFT_eSprite bk = TFT_eSprite(&tft);
+TFT_eSprite pole = TFT_eSprite(&tft);
+TFT_eSprite fence = TFT_eSprite(&tft);
 
-//void TaskPlayMusic(void *pvParameters) {
-  //esp_task_wdt_init(62, false);//62 sec wd timer / disable wd
-  //while(1) {
+//------ NES Audio play on Task0
+TaskHandle_t TaskHandle0 = NULL;//create taskhandle0
+
+void TaskPlayMusic(void *pvParameters) {
+  esp_task_wdt_init(62, false);//62 sec wd timer / disable wd
+  while(1) {
  // player.frame_counter_cb(danceLight);//cal back fucntion (not use)
-  //player.play_nes(song , true, 0.25); //play nes music, loop, volume 0.25, <lower vol lower distortion>
+  player.play_nes(song , true, 0.25); //play nes music, loop, volume 0.25, <lower vol lower distortion>
  
-//  }
-//}
+  }
+}
 //----------------------------
 void animation() {//start field effect
-// Clear the Screen
+//sprite variable
+#define BK_HEIGHT 80
+#define BK_WIDTH 235
+  uint8_t cur_x = 68;
+  uint8_t cur_y = 10;
+  uint8_t dash_x = 20;
+  int16_t tag_x = 235;
+  int16_t fence_x = 0;
+  uint8_t ani_speed = 2;
+
+//create spirtes
+  bk.createSprite(BK_WIDTH,BK_HEIGHT);
+
+  car.createSprite(CAR_WIDTH,CAR_HEIGHT);//image size 114x50
+  car.setSwapBytes(true);
+  car.pushImage(0,0,CAR_WIDTH,CAR_HEIGHT,futurecar);//image size 114x50
+
+  pole.createSprite(POLE_WIDTH,POLE_HEIGHT);
+  pole.setSwapBytes(true);
+  pole.pushImage(0,0,POLE_WIDTH,POLE_HEIGHT,pole1);
+
+  fence.createSprite(FENCE_WIDTH,FENCE_HEIGHT);
+  fence.setSwapBytes(true);
+  fence.pushImage(0,0,FENCE_WIDTH,FENCE_HEIGHT,fence1);
+//-------------------------------
   tft.fillScreen(TFT_BLACK);//clear screen  
-// Draw text
+//draw QRCode
+  tft.drawBitmap(0, 159, qrcode, QRCODE_WIDTH, QRCODE_HEIGHT, TFT_WHITE);
+//draw text
   tft.setTextColor(TFT_WHITE);
   tft.drawString(">MAP/ENG LOAD/ECT/EOT/TFT/ENG SPD/PCM Volt",0,40,2);
   tft.drawString(">Warning, Automatic Dim/OnOff/O็verheat Shutdown",0,60,2);
   tft.drawString(">Read DTC Code & Clear MIL Status",0,80,2);
-  tft.drawString("* Open-delphi-display-Beta.bin\",0,100,2);
-  tft.drawString("* www.open-delphi.com",0,120,2);
+  tft.drawString("* FW-\"VaandCobOBD2Gauge.bin\" * Image-\"mypic.jpg\"",0,100,2);
+  tft.drawString("* Facebook : www.facebook.com/vaandcob",0,120,2);
   tft.setTextColor(TFT_YELLOW);
-  tft.drawString(" [ Press button to exit ]",0,140,2);
+  tft.drawString("  [ Manual ] ----------------[ Press button to exit ]",0,140,2);
   tft.setTextColor(TFT_CYAN); 
-  // String txt = "[ "+serial_no+" ] BUILD : "+compile_date;
-  tft.drawString("Open-Delphi-Display Beta",0,0,2);
+  String txt = "[ "+serial_no+" ] BUILD : "+compile_date;
+  tft.drawString(txt,0,0,2);
   //get VIN
   getPID("ATE0");//force echo off
   txt = "VIN :  " + getVIN(getPID("0902"));
@@ -79,6 +111,65 @@ void animation() {//start field effect
   tft.drawString(txt,0,20,2);
 
   bk.setTextColor(TFT_BLACK,TFT_ORANGE);
+//loop draw Animation
+  while (digitalRead(SELECTOR_PIN) == HIGH) {//exit if press button
+
+  //draw road
+    bk.fillSprite(0x4228);//draw road
+    bk.fillRect(0,0,235,16,TFT_LIGHTGREY);
+    bk.fillRect(0,16,235,3,0x8430);
+
+  //draw dash line
+    for(int16_t i = 0; i < 5; i++) {
+                     //speed     //space //posY //length
+   // bk.drawFastHLine(dash_x         +(40 * i), 20,10,TFT_WHITE);//far end dash line
+      bk.drawFastHLine((dash_x-20)*1.5+(60 * i),45,15,TFT_WHITE);//middle dash line
+   // bk.drawFastHLine((dash_x-40)*2.0+(80 * i),79,20,TFT_WHITE);//nearest dash line
+    }
+    dash_x = dash_x - ani_speed;
+    if (dash_x <= 0 ) dash_x = 40;
+
+  //draw traffic 
+    tag_x = tag_x - ani_speed;
+    if (tag_x <= -80) tag_x = 235;
+    //bk.setTextColor(random(0xffff));
+    bk.drawString("< Thank You >",tag_x,0,2);//draw billboard
+
+  //draw car
+    int8_t move = random(-1,2);
+    cur_x = cur_x + move;
+    move = random(-1,2);
+    cur_y = cur_y + move;
+    if (cur_x > 235-CAR_WIDTH) cur_x = 235-CAR_WIDTH;
+    if (cur_x < 1) cur_x = 1;
+    if (cur_y < 1) cur_y = 1;
+    if (cur_y > 79-CAR_HEIGHT) cur_y = 79-CAR_HEIGHT;
+    car.pushToSprite(&bk,cur_x,cur_y,TFT_BLACK);//put car into bk, white color as transparent
+
+  //draw fence
+  for(int i=0;i<8;i++)//7 sprites
+     fence.pushToSprite(&bk,fence_x*2+(FENCE_WIDTH*i),80-FENCE_HEIGHT,TFT_BLACK);
+  fence_x = fence_x - ani_speed;
+  if (fence_x <= -FENCE_WIDTH + ani_speed) fence_x = 0;//loop back
+
+  //draw pole 
+  pole.pushToSprite(&bk,tag_x*2,80-POLE_HEIGHT,TFT_BLACK);//draw bush
+
+  //show background sprite
+  bk.pushSprite(85,159);
+  //led blinking effect
+  digitalWrite(LED_RED_PIN, random(0,2));
+  digitalWrite(LED_GREEN_PIN, random(0,2));
+  digitalWrite(LED_BLUE_PIN, random(0,2));
+  checkCPUTemp();
+  autoDim();
+  }
+ //remove sprites
+  car.deleteSprite();
+  bk.deleteSprite();
+  pole.deleteSprite();
+  fence.deleteSprite();
+}//task star field
 
 /*------------------*/ 
 //highlight and change warning each menu
@@ -551,9 +642,9 @@ dtcRead = "00E 0: 43 06 00 7D C6 93 1: 01 08 C6 0F 02 E9 02 2: E0 CC CC CC CC CC
            tft.setTextColor(TFT_WHITE,TFT_BLACK);
            tft.drawString("Gauge Auto-off Setting",40,30,4);
            tft.setTextColor(TFT_WHITE,TFT_BLACK);           
-           tft.drawString("Minimum PCM Voltage to auto-off",10,65,2);
-           tft.drawString("If the gauge turns off while running",10,85,2);
-           tft.drawString("please lower voltage threshold",10,105,2);
+           tft.drawString("Set detection PCM voltage to turn off gauge.",10,65,2);
+           tft.drawString("If gauge turn off while the engnine is running",10,85,2);
+           tft.drawString("Please lower down the voltage",10,105,2);
            tft.drawString("Volt",220,135,4);
            tft.setTextColor(TFT_BLACK,TFT_WHITE);
            tft.drawCentreString("[- Press button to exit -]",159,180,4); 
