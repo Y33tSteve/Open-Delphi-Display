@@ -27,24 +27,35 @@ void getAB2(String elm_rsp,String mode,String para) {  //41 05 2A 3C 01>
 
 }//getAB
 /*------------------*/ 
-String getPID(String pid) {//fucntion getpid response from elm327
-    while (BTSerial.available()>0) {//clear rx buffer
+String getPID(String pid) { //function to get pid response from elm327
+    //Clear the Bluetooth Serial buffer
+    while (BTSerial.available()>0) {
       BTSerial.read();
     }  
    String bt_response = "";
-   BTSerial.print(pid+"\r");//get no of dtc
-   delay(500);//wait for response
-   while (BTSerial.available()>0) {//reading Bluetooth
+    // Determine the command to send
+    if (pid == "ATRV") {
+        // Custom command for voltage reading
+        BTSerial.print("ATRV\r");
+    } else {
+        // Standard PID command
+        BTSerial.print(pid + "\r");
+    }
+
+   delay(500);// Wait for a response
+
+    // read the bluetooth response
+   while (BTSerial.available()>0) {
     char incomingChar = BTSerial.read();
-    //check CR/NL
+    // Check for the end character '>'    
     if (incomingChar == '>') {
       Serial.println(bt_response);
       BTSerial.flush();
     } else {
-      bt_response.concat(incomingChar);//keep elm327 respond
+      bt_response.concat(incomingChar); // Append character to response
     }
    } //while BTSerial
-   return bt_response;
+   return bt_response; // Return the response (PID data or voltage)
 }
 /*------------------*/ 
 /* VIN reading
