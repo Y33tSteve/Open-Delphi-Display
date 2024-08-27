@@ -438,10 +438,11 @@ if (pidList[pid] == "0142") { //pis = 010C engine speed RPM
   }//if PID = "010C"
 }
 /*-------------------------------*/
-//coolant volt oiltemp vaporpressure TFT Load
-// {"01051","01421","015C1","01321","221E1C1","01041"};
-void updateMeter(uint8_t pidNo, String response) {  //update parameter on screen
-  // Array data -> { Label , unit, pid, fomula, min, max, ,skip, digit }
+// Update Parameter on screen  
+// pidConfig Array data structure { Label , unit, pid, formula, min, max, ,skip, digit }
+// pidConfig defined on main.ino
+void updateMeter(uint8_t pidNo, String response) {
+ // Retrieve configuration data from pidConfig array
   String label = pidConfig[pidInCell[layout][pidNo]][0];
   //String unit = pidConfig[pidInCell[layout][pidNo]][1];
   uint8_t formula = pidConfig[pidInCell[layout][pidNo]][3].toInt();
@@ -450,18 +451,21 @@ void updateMeter(uint8_t pidNo, String response) {  //update parameter on screen
   bool digit = pidConfig[pidInCell[layout][pidNo]][7].toInt();
   int warn = warningValue[pidInCell[layout][pidNo]].toInt();
 
-  getAB(response);  //get AB
+  getAB(response);  // Extract data bytes A and B from the response
+ 
   float data = 0.0;
-  switch (formula) {                  //choose fomula
-    case 0: data = A * 0.145; break;  //psi
-    case 1: data = A - 40; break;     //temp
-    case 2: data = A * 100.0 / 255; break;
-    case 3: data = (256 * A + B) / 4.0; break;
-    case 4: data = (256 * A + B) / 1000.0; break;
-    case 5: data = (256 * A + B) / 16.0; break;
-    case 6: data = (256 * A + B) / 8.0; break;
-      //more formula
-  }  //switch fomula
+  // Apply the appropriate formula based on the formula index
+  switch (formula) { 
+    case 0: data = A * 0.145; break;  //PSI Formula
+    case 1: data = A - 40; break;     //Temperature Formula
+    case 2: data = A * 100.0 / 255; break; // Engine Load Percentage Formula 0-100%
+    case 3: data = (256 * A + B) / 4.0; break; // RPM Formula
+    case 4: data = (256 * A + B) / 1000.0; break; // Voltage Formula
+    case 5: data = (256 * A + B) / 16.0; break; // Trans Temp
+    case 6: data = (256 * A + B) / 8.0; break; // Trans Temp
+    case 7: data = (A / 2.0) - 64; break;  // Formula for Ignition Timing
+    // add additional formulas here for PID/Input conversions
+  }  //switch formula
 
   switch (layout) {
     case 0:
