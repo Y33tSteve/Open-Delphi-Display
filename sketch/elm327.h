@@ -73,38 +73,64 @@ char HextoChar(uint8_t asciiCode) {
 }
 //----------------------------
 //function get VIN   Serial.println(getVIN(getPID(0902)));
+// Function to retrieve the complete VIN
+String retrieveVIN() {
+  // Step 1: Request PID 0902 to get the total number of frames needed for the VIN
+  String response0902 = getPID("0902"); // Ensure the argument is a string "0902"
+  response0902.trim();
+  
+  // Step 2: Parse the response to get the number of messages
+  if (response0902.length() == 0) {
+    Serial.println("No response for PID 0902");
+    return "Cannot read VIN";
+  }
+
+  // Assume response format gives byte count or frames needed as first byte
+  int frameCount = strtol(response0902.substring(0, response0902.indexOf(' ')).c_str(), NULL, 16);
+  if (frameCount <= 0) {
+    Serial.println("Invalid frame count for VIN");
+    return "Cannot read VIN";
+  }
+
+  // Step 3: Request PID 0904 to get the actual VIN
+  String completeVIN = "";
+  for (int i = 0; i < frameCount; i++) {
+    String response0904 = getPID("0904"); // Request PID 0904
+    response0904.trim();
+    
+    // Step 4: Parse the response from PID 0904
+    completeVIN += getVIN(response0904); // Append the parsed VIN data to the complete VIN
+  }
+
+  // Remove any unnecessary characters or spaces from VIN
+  completeVIN.trim();
+  if (completeVIN.length() == 17) {
+    Serial.println("VIN: " + completeVIN);
+    return completeVIN; // Return the complete VIN
+  } else {
+    Serial.println("Incomplete VIN received");
+    return "Cannot read VIN";
+  }
+}
+
+// Helper function to parse the response from PID 0904
 String getVIN(String elm_rsp) {
   String VIN = "";
-  uint8_t byteCount = 0;
   elm_rsp.trim();
-  while (elm_rsp.length() > 0) {//keep reading each char
-    int index = elm_rsp.indexOf(' ');//check space
-    String getByte =  elm_rsp.substring(0, index);//get first byte
-    if (index == -1)  {//no space found
-        byte ascii = strtol(getByte.c_str(), NULL, 16);//read ascii
-        VIN.concat(HextoChar(ascii));//last char
-        //check correct VIN
-        if (VIN.length() == byteCount) {
-          VIN = VIN.substring(3);//remove first 3 string
-          Serial.println("VIN: " + VIN);
-          return VIN;//return VIN number
-        } else {
-          return "Cannot read VIN";
-        }
+  
+  while (elm_rsp.length() > 0) {
+    int index = elm_rsp.indexOf(' ');
+    String getByte = (index == -1) ? elm_rsp : elm_rsp.substring(0, index);
 
-    } else {//found space
-      if (getByte.indexOf(':') == -1 ) {
-        if (getByte.length() >= 3) {
-          byteCount = strtol(getByte.c_str(), NULL, 16);//get byte count
-        } else {//skip ':' byte
-          byte ascii = strtol(getByte.c_str(), NULL, 16);//read ascii
-          VIN.concat(HextoChar(ascii));//convert to hex charactor
-        }
-      } 
-      elm_rsp = elm_rsp.substring(index + 1);//copy the rest behind space to elm_rsp.
-    }//else
-  }  //while
-  return "Cannot read VIN";
+    if (getByte.indexOf(':') == -1 && getByte.length() == 2) { // Ignore headers and extract only data bytes
+      byte ascii = strtol(getByte.c_str(), NULL, 16);
+      VIN.concat(HextoChar(ascii)); // Convert the byte to a character
+    }
+    
+    elm_rsp = (index == -1) ? "" : elm_rsp.substring(index + 1);
+  }
+
+  return VIN;
 }//getVIN
 //----------------------------
 
