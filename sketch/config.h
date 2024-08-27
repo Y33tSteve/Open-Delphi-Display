@@ -15,7 +15,7 @@ this header file is for configuration menu
 #define FORMAT_SPIFFS_IF_FAILED true//format if no spiffs
 
 
-Cartridge player(BUZZER_PIN);//not specified 4 pin , use 1 pin at buzzer pin
+Cartridge player(BUZZER_PIN); //not specified 4 pin , use 1 pin at buzzer pin
 
 //configuration menu 
 const String menuList[8] = {
@@ -33,13 +33,13 @@ const uint8_t maxMenu = array_length(menuList);//length of menu list
 //menu list for warning setting
 const String parameterList[8][2] = {
     {"CPU Overheat Temperature "+String(tempOverheat)+"`c ,offset "," `c  "},
-    {"- Engine Load"," %  "},
-    {"- Coolant Temperature"," `c  "},
-    {"- Manifold Air Pressure"," psi "},
-    {"- Engine Speed"," rpm "},
-    {"- PCM Voltage"," volt"},
-    {"- Engine Oil Temperature"," `c  "},
-    {"- Transmission Fluid Temperature"," `c  "}
+    {"- IAT"," °F  "},
+    {"- ECT"," °F  "},
+    {"- MAP"," kpa  "},
+    {"- RPM"," rpm  "},
+    {"- Volts"," volt  "},
+    {"- Fuel Pressure"," psi  "},
+    {"- Timing"," °  "}
   };  
 
 //increasement and decreasement of each PID  
@@ -74,7 +74,7 @@ void animation() {//start field effect
   int16_t fence_x = 0;
   uint8_t ani_speed = 2;
 
-//create spirtes
+//create sprites
   bk.createSprite(BK_WIDTH,BK_HEIGHT);
 
   car.createSprite(CAR_WIDTH,CAR_HEIGHT);//image size 114x50
@@ -91,16 +91,16 @@ void animation() {//start field effect
 //-------------------------------
   tft.fillScreen(TFT_BLACK);//clear screen  
 //draw QRCode
-  tft.drawBitmap(0, 159, qrcode, QRCODE_WIDTH, QRCODE_HEIGHT, TFT_WHITE);
+  //tft.drawBitmap(0, 159, qrcode, QRCODE_WIDTH, QRCODE_HEIGHT, TFT_WHITE);
 //draw text
   tft.setTextColor(TFT_WHITE);
-  tft.drawString(">MAP/ENG LOAD/ECT/EOT/TFT/ENG SPD/PCM Volt",0,40,2);
-  tft.drawString(">Warning, Automatic Dim/OnOff/O็verheat Shutdown",0,60,2);
-  tft.drawString(">Read DTC Code & Clear MIL Status",0,80,2);
-  tft.drawString("* FW-\"VaandCobOBD2Gauge.bin\" * Image-\"mypic.jpg\"",0,100,2);
-  tft.drawString("* Facebook : www.facebook.com/vaandcob",0,120,2);
+  tft.drawString(">PID Settings",0,40,2);
+  tft.drawString(">Warning, Automatic Dim/OnOff/Overheat Shutdown",0,60,2);
+  tft.drawString(">DTCs & MIL ",0,80,2);
+  tft.drawString("* Open-Delphi-Display-Beta.bin\",0,100,2);
+  tft.drawString("* www.open-delphi.com",0,120,2);
   tft.setTextColor(TFT_YELLOW);
-  tft.drawString("  [ Manual ] ----------------[ Press button to exit ]",0,140,2);
+  tft.drawString("  [ Press button to exit ]",0,140,2);
   tft.setTextColor(TFT_CYAN); 
   String txt = "[ "+serial_no+" ] BUILD : "+compile_date;
   tft.drawString(txt,0,0,2);
