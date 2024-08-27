@@ -76,20 +76,17 @@ skip = delay reading 0 - 3; 3 = max delay read
 digit = how many decimal places you want, 0 is no decimal
 warn = default warning value
 */
-const String pidConfig[7][9] = {
+const String pidConfig[7][9] = { // Updated the bracketed values to reflect number of rows below. Starts at 1, not 0
   //{ Label , unit, pid, formula, min, max, ,skip, digit, warn }
-  { "IAT", "°F", "010F", "1", "-40", "283.8", "0", "0", "160" },     //0 = 0104
-  { "ECT", "°F", "0105", "1", "-40", "260", "0", "0", "212" },      // ECT Sensor, PID 0005, °F, Formula: (x-40) * 1.8 + 32.0
-  { "MAP", "kPa", "010B", "0", "100", "0", "0", "1", "100" },        // MAP Sensor, PID 000B, kPa, Formula: x
-  { "RPM", "rpm", "010C", "3", "0", "7000", "0", "0", "5000" }, //3 = 010C
-  { "Volts", "volt", "ATRV", "4", "0", "16", "1", "1", "15" },   // ATRV value from ELM327 Device
-  { "Fuel Pressure", "PSI", "114E", "0", "0", "100", "0", "1", "45" }, // Fuel Tank Pressure Sensor Voltage, PID 114E, Volts, Formula: x/51
-  { "Timing", "°", "010E", "7", "-64", "63.5", "0", "0", "35" },   // Ignition Timing, PID 000E, Degrees, Formula: (x/2)-64
-  //{ "Trans Temp", "`C", "221674", "6", "0", "120", "3", "1", "99" } //6 = 221674 for FORD T5
+  { "IAT", "°F", "010F", "5", "-40", "283.8", "0", "0", "160" },     // Intake Air Temp
+  { "ECT", "°F", "0105", "5", "-40", "260", "0", "0", "212" },      // ECT Sensor
+  { "MAP", "kPa", "010B", "0", "100", "0", "0", "1", "100" },        // MAP Sensor
+  { "RPM", "rpm", "010C", "3", "0", "7000", "0", "0", "5000" }, // Engine Speed
+  { "Volts", "volt", "ATRV", "7", "0", "16", "1", "1", "15" },   // ATRV value from ELM327 Device
+  { "Fuel Pressure", "PSI", "114E", "0", "0", "100", "0", "1", "45" }, // Fuel Tank Pressure Sensor Voltage
+  { "Timing", "°", "010E", "6", "-64", "63.5", "0", "0", "35" },   // Ignition Timing
 };
 
-//barometric pressure "0133"  turbo boost = map - bp;
-//hold warning value
 String warningValue[7] = {"80","99","35","4000","15","99","99"};
 
 /*  User configuration here to change display 
