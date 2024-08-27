@@ -42,7 +42,7 @@ Preferences pref;//create preference
 
 //Pin configuration
 #define SCA_PIN 21//not used same pin with TFT_BL
-#define SCL_PIN 22//not used (avaialable) CAN_TX
+#define SCL_PIN 22//not used (available) CAN_TX
 #define ADC_PIN 35//not used (available)  CAN_RX
 #define LED_RED_PIN 4
 #define LED_GREEN_PIN 16
@@ -272,28 +272,37 @@ void setup() {
   ts.setRotation(1);
   touch_calibrate();//hold button at start to calibrate touch
   //testTouch();//test touchscreen
-  
+
+  // Initialize display settings
   tft.setSwapBytes(true);//to display correct image color
   //tft.pushImage(0,0,320,240,vaandcob);//show logo
-  tft.pushImage(135,100,100,50,futurecar);
-  //delay(3000);
-  //backlight ledcAttachPin must be set after tft.init()
+  
+  // Backlight control with fading effect
   ledcAttachPin(TFT_BL, backlightChannel);//attach backlight
   for (uint8_t i=255;i>0;i--) {//fading effect
     ledcWrite(backlightChannel, i);//full bright
     delay(5);
   }
-  digitalWrite(LED_RED_PIN, HIGH);//red off
+  digitalWrite(LED_RED_PIN, HIGH);// Turn off red LED
+
+  // Clear the screen and set the new header background color to grey
   tft.fillScreen(TFT_BLACK);//show start page 
-  tft.fillRectVGradient(0, 0, 320, 26, TFT_YELLOW, 0x8400);
-  tft.setTextColor(TFT_BLACK);
-  tft.pushImage(0,0,320,25,obd2gauge);//show logo
-  ledcWrite(backlightChannel,255);//full bright
-  tft.setTextColor(TFT_WHITE,TFT_RED);
-  tft.drawRightString("   Config button ->",319,26,2);
-  String txt = " BUILD : "+compile_date;
-  tft.setTextColor(TFT_WHITE,TFT_BLUE);
-  tft.drawString(txt,0,26,2);
+  tft.fillRectVGradient(0, 0, 320, 26, TFT_LIGHTGREY, TFT_DARKGREY); // Set header to grey gradient
+
+  // Replace the logo with a text field
+  tft.setTextColor(TFT_BLACK); // Set text color for header text
+  tft.setTextDatum(TL_DATUM); // Set text alignment to top-left corner
+
+  String headerText = "Open-Delphi Display"; // Header Logo
+  tft.drawString(headerText, 10, 5, 2); // Draw the text at (10,5) position with font size 2
+  
+  ledcWrite(backlightChannel,255); // backlight at full bright
+  tft.setTextColor(TFT_BLACK, TFT_WHITE); // Set text color with red background for "Config button" text
+  tft.drawRightString("   Config button ->",319,26,2); // Config button in white box with black text
+  
+  String txt = " Beta : "+compile_date; // Build state
+  tft.setTextColor(TFT_WHITE,TFT_BLUE); // box color with text
+  tft.drawString(txt,0,26,2); // Display the text at this position
   
   //checkGenuine();//check guniune
 //init variable
@@ -431,11 +440,11 @@ if (digitalRead(SELECTOR_PIN) == LOW) {//button pressed
       #ifdef SERIAL_DEBUG
       Serial.println(bt_message);
       #endif 
-      #ifdef TERMINAL //for degbugging
+      #ifdef TERMINAL //for debugging
       getAB(bt_message);
       Terminal(bt_message+"->"+String(A)+","+String(B),0,48,320,191);
       #endif
-      prompt = true;//pid response ready to calculate & display
+      prompt = true; //pid response ready to calculate & display
     } else {
       bt_message.concat(incomingChar);//keep elm327 respond
     }
@@ -463,9 +472,9 @@ if (digitalRead(SELECTOR_PIN) == LOW) {//button pressed
   }//if Serial.available
 
 //Send another PID to elm327
-if (prompt) {//> ELM327 ready! -> request next PID
-    prompt = false;//no prompt from ELM327
-    checkCPUTemp();//check temperature.   
+if (prompt) { //> ELM327 ready! -> request next PID
+    prompt = false; //no prompt from ELM327
+    checkCPUTemp(); //check temperature.   
     if (!skip) {
       updateMeter(pidIndex,bt_message);//update meter screen
       pidRead++;//for calculate pid/s
