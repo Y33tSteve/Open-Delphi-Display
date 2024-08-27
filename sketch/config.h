@@ -97,7 +97,7 @@ void animation() {//start field effect
   tft.drawString(">PID Settings",0,40,2);
   tft.drawString(">Warning, Automatic Dim/OnOff/Overheat Shutdown",0,60,2);
   tft.drawString(">DTCs & MIL ",0,80,2);
-  tft.drawString("* Open-Delphi-Display-Beta.bin\",0,100,2);
+  tft.drawString("* FW-\"Open-Delphi-Display-Beta.bin\" *", 0, 100, 2);
   tft.drawString("* www.open-delphi.com",0,120,2);
   tft.setTextColor(TFT_YELLOW);
   tft.drawString("  [ Press button to exit ]",0,140,2);
@@ -640,11 +640,11 @@ dtcRead = "00E 0: 43 06 00 7D C6 93 1: 01 08 C6 0F 02 E9 02 2: E0 CC CC CC CC CC
            tft.fillRect(0,30,320,210,TFT_BLACK);
            tft.pushImage(0,30,25,25,autooff);//about
            tft.setTextColor(TFT_WHITE,TFT_BLACK);
-           tft.drawString("Gauge Auto-off Setting",40,30,4);
+           tft.drawString("Auto-off Setting",40,30,4);
            tft.setTextColor(TFT_WHITE,TFT_BLACK);           
-           tft.drawString("Set detection PCM voltage to turn off gauge.",10,65,2);
-           tft.drawString("If gauge turn off while the engnine is running",10,85,2);
-           tft.drawString("Please lower down the voltage",10,105,2);
+           tft.drawString("Auto-Off Voltage Threshold.",10,65,2);
+           tft.drawString("If the gauge turns off while running",10,85,2);
+           tft.drawString("lower the voltage down",10,105,2);
            tft.drawString("Volt",220,135,4);
            tft.setTextColor(TFT_BLACK,TFT_WHITE);
            tft.drawCentreString("[- Press button to exit -]",159,180,4); 
