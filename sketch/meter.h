@@ -465,8 +465,14 @@ void updateMeter(uint8_t pidNo, String response) {
     case 5: data = ((A - 40) * 1.8) + 32.0; break;  // ECT/IAT in Farenheit
     case 6: data = (A / 2.0) - 64; break;  // Formula for Ignition Timing
     case 7: { // Formula for Voltage from ATRV response
-      response.replace("V", "");  // Remove the "V" character from the response
-      data = response.toFloat();  // Convert the numeric part to float
+      if (response.startsWith("ATRV")) {
+        // Remove the "ATRV" prefix and "V" character
+        response.replace("ATRV", "");  
+      }
+      // Remove any remaining "V" character from the response
+      response.replace("V", ""); 
+      // Convert the numeric part to float
+      data = response.toFloat();  
       break; 
     }
     // add additional formulas here for PID/Input conversions
