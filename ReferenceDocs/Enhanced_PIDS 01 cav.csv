@@ -57,6 +57,7 @@
 "~Displayed Oil Pressure","Oil_Display","0x11","A*4*.14503778",0,100,"PSI","A94AF1","","",1,0
 "~Engine Oil Pressure Switch (bit 2) (4.2l)","Oil Pres","0x221102","Lookup(Bit(A:2)::0='OK':1='LOW')",0,100,"PSI","6C10F1","","",1,0
 "~Engine Run Time MM.mm","Eng RunTime","0x2211a1","((A<8) + B)/60",0,1000,"Minutes","6C10F1","","",1,0
+"~Flex Fuel % (sensor)","Flex Fuel","0x2212F3","A/2.55",0,100,"Percent","6C10F1","","",1,0
 "~Fuel Level % (tank)","Fuel Level","0x221155","A/255*100",0,100,"Percent","6C10F1","","",1,0
 "~Fuel Pump Relay Command (bit 7)","FP Relay Com","0x221110","Lookup(bit(A:7)::0='OFF':1='ON')",0,1,"","6C10F1","","",1,0
 "~Fuel Tank Pressure","FT_Pres","0x22114e","A/51",0,100,"Volts","6C10F1","","",1,0
