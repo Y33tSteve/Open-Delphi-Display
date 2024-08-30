@@ -1,0 +1,91 @@
+"Name", "ShortName", "ModeAndPID", "Equation", "Min Value", "Max Value", "Units", "Header", "startDiagnostic", "stopDiagnostic", "scale","minimumRefreshDelayMillis"
+"[GM]1-2 Shift Error","1-2Shift","0x221997","A/40",0,70,"Seconds","Auto","","",1,0
+"[GM]1-2 Shift Time","1-2Shift","0x221993","A/40",0,70,"Seconds","Auto","","",1,0
+"[GM]2-3 Shift Error","2-3Shift","0x221998","A/40",0,70,"Seconds","Auto","","",1,0
+"[GM]2-3 Shift Time","2-3Shift","0x221994","A/40",0,70,"Seconds","Auto","","",1,0
+"[GM]3-4 Shift Error","3-4Shift","0x221999","A/40",0,70,"Seconds","Auto","","",1,0
+"[GM]3-4 Shift Time","3-4Shift","0x221995","A/40",0,70,"Seconds","Auto","","",1,0
+"[GM]AFR (Commanded)","AFR (Com)","0x22119e","A/10",0,255,":1","Auto","","",1,0
+"[GM]Balance Rate (Cyl 1)","BAL C1","0x22162f","((((A<8)+B)-32768)*0.15625)/10",0,100,"-","Auto","","",1,0
+"[GM]Balance Rate (Cyl 2)","BAL C2","0x221630","((((A<8)+B)-32768)*0.15625)/10",0,100,"-","Auto","","",1,0
+"[GM]Balance Rate (Cyl 3)","BAL C3","0x221631","((((A<8)+B)-32768)*0.15625)/10",0,100,"-","Auto","","",1,0
+"[GM]Balance Rate (Cyl 4)","BAL C4","0x221632","((((A<8)+B)-32768)*0.15625)/10",0,100,"-","Auto","","",1,0
+"[GM]Current Gear","Gear","0x22199a","A",0,6,"","Auto","","",1,0
+"[GM]Desired Idle Speed","Idle Spd","0x221192","A*12.5",0,2000,"RPM","Auto","","",10,0
+"[GM]EGR Duty Cycle","EGR Duty","0x221171","A / 2.55",0,100,"%","Auto","","",1,0
+"[GM]EGR V","EGR V","0x22114b","A / 51",0,70,"V","Auto","","",1,0
+"[GM]Evap","Evap","0x221170","A / 2.55",0,100,"%","Auto","","",1,0
+"[GM]H2OS Sensor","H2OS","0x221145","(0.434*A)*10",0,1000,"mV","Auto","","",10,0
+"[GM]IAC Position","IAC Pos","0x221172","A",0,255,"","Auto","","",1,0
+"[GM]Ignition 1 Voltage","Ign V","0x221141","A/10",9,20,"V","Auto","","",1,0
+"[GM]Injector Pulse Width (Cyl 1)","IPW C1","0x221193","(((A<8)+B)/65.535)",0,100,"ms","Auto","","",1,0
+"[GM]Injector Pulse Width (Cyl 2)","IPW C2","0x221194","(((A<8)+B)/65.535)",0,100,"ms","Auto","","",1,0
+"[GM]Injector Pulse Width (Cyl 3)","IPW C3","0x221195","(((A<8)+B)/65.535)",0,100,"ms","Auto","","",1,0
+"[GM]Injector Pulse Width (Cyl 4)","IPW C4","0x221196","(((A<8)+B)/65.535)",0,100,"ms","Auto","","",1,0
+"[GM]Knock Retard","KR","0x2211a6","(22.5*A)/256",0,50,"Deg.","Auto","","",1,0
+"[GM]Last Shift Time","Last Shift","0x221992","A/40",0,70,"Seconds","Auto","","",1,0
+"[GM]Misfire Cyl.1 Current","MF C1 Cur","0x221205","A",0,1000,"Count","Auto","","",1,0
+"[GM]Misfire Cyl.1 History","MF C1 Hst","0x221201","(A<8)+B",0,1000,"Count","Auto","","",10,0
+"[GM]Misfire Cyl.2 Current","MF C2 Cur","0x221206","A",0,1000,"Count","Auto","","",1,0
+"[GM]Misfire Cyl.2 History","MF C2 Hst","0x221202","(A<8)+B",0,1000,"Count","Auto","","",10,0
+"[GM]Misfire Cyl.3 Current","MF C3 Cur","0x221207","A",0,1000,"Count","Auto","","",1,0
+"[GM]Misfire Cyl.3 History","MF C3 Hst","0x221203","(A<8)+B",0,1000,"Count","Auto","","",10,0
+"[GM]Misfire Cyl.4 Current","MF C4 Cur","0x221208","A",0,1000,"Count","Auto","","",1,0
+"[GM]Misfire Cyl.4 History","MF C4 Hst","0x221204","(A<8)+B",0,1000,"Count","Auto","","",10,0
+"[GM]Oil Life (Engine)","Oil.Life","0x22119f","(A/255)*100",0,200,"%","Auto","","",1,0
+"[GM]PC Solenoid Actual Current","PC.Sol.Act","0x22199e","A * 0.0195",0,40,"Amps","Auto","","",1,0
+"[GM]PC Solenoid Reference Current","PC.Sol.Ref","0x22199f","A * 0.0195",0,40,"Amps","Auto","","",1,0
+"[GM]TCC Slip Speed","TCC Slip","0x221991","((signed(A)*256)+B)/8",0,10000,"RPM","Auto","","",1,0
+"[GM]Transmission Fluid Temp (GM Method 1)","Trans.Fl.Tmp","0x221940","A-40",0,200,"°C","Auto","","",1,0
+"[GM]Transmission Input Speed","Trns.Inp","0x221941","((A<8)+B)*.125",0,8000,"RPM","Auto","","",1,0
+"[GM]Transmission Output Speed","Trns.Out","0x221942","((A<8)+B)*.125",0,8000,"RPM","Auto","","",1,0
+"~A/C High Pressure","A/C Hi Pres","0x221144","(A*1.83)-14.7",0,400,"PSI","6C10F1","","",1,0
+"~A/C High Pressure #2","A/C Hi Pres","0x2211a4","A*1.83-14.7",0,500,"PSI","6C10F1","","",1,0
+"~A/C Relay Command (PID 1110 Bit 2)","A/C Relay","0x221110","Lookup(Bit(A:2)::0='OFF':1='ON')",0,1,"","6C10F1","","",1,0
+"~A/C Request (Pid 1100 Bit 1)","A/C Request","0x221100","Lookup(bit(A:1)::1='ON':0='OFF')",0,1,"","6C10F1","","",1,0
+"~Air Flow Calculated (g/sec)","AirFlow Calc","0x2211ac","((A<8) + B) / 128",0,1000,"g/sec","6C10F1","","",1,0
+"~Air Fuel target Ratio","A/F Ratio","0x22119e","A/10",0,20,"Ratio X:1","6C10F1","","",1,0
+"~Barometer","Baro","0x22119d","(A/51)*2.74+1.5",0,20,"PSI","6C10F1","","",1,0
+"~CKP Active Counter","CKP Act ##","0x22115d","A",0,255,"Counter","6C10F1","","",1,0
+"~CMP Active Counter","CMP Act ##","0x22115e","A",0,255,"Counter","6C10F1","","",1,0
+"~CMP or Med Res Resynch Count #1","Resynch #1","0x22115f","A",0,100,"Count","6C10F1","","",1,0
+"~CMP or Med Res Resynch Count #2","Resynch #2","0x221160","A",0,100,"Count","6C10F1","","",1,0
+"~Cruise Control Active (Pid 1100 Bit 7)","Cruise Active A:7","0x221100","Lookup(BIT(A:7): :1='Active':0='OFF')",0,100,"","6C10F1","","",1,0
+"~Cruise Release TCC Brake Switch (Pid 1100 Bit 5)","Cruise Release","0x221100","Lookup(BIT(A:5): :1='Open':0='Closed')",0,1,"","6C10F1","","",1,0
+"~Cruise Set/Decel Button (bit 5)","Cruise Set","0x221116","Lookup(Bit(A:5)::0='OFF':1='ON')",0,1,"","6C10F1","","",1,0
+"~Displayed Fuel Level %","Fuel%_Disp","0x12","A/2.55",0,100,"Percent","A982F1","","",1,0
+"~Displayed Oil Pressure","Oil_Display","0x11","A*4*.14503778",0,100,"PSI","A94AF1","","",1,0
+"~Engine Oil Pressure Switch (bit 2) (4.2l)","Oil Pres","0x221102","Lookup(Bit(A:2)::0='OK':1='LOW')",0,100,"PSI","6C10F1","","",1,0
+"~Engine Run Time MM.mm","Eng RunTime","0x2211a1","((A<8) + B)/60",0,1000,"Minutes","6C10F1","","",1,0
+"~Fuel Level % (tank)","Fuel Level","0x221155","A/255*100",0,100,"Percent","6C10F1","","",1,0
+"~Fuel Pump Relay Command (bit 7)","FP Relay Com","0x221110","Lookup(bit(A:7)::0='OFF':1='ON')",0,1,"","6C10F1","","",1,0
+"~Fuel Tank Pressure","FT_Pres","0x22114e","A/51",0,100,"Volts","6C10F1","","",1,0
+"~Fuel Trim Cell","FTC","0x221190","A",0,100,"","6C10F1","","",1,0
+"~Fuel Trim Index","FTI","0x22120d","(A-127.5)/1.275",0,100,"","6C10F1","","",1,0
+"~Gen F Terminal Signal %","Gen F","0x22114d","A/2.55",0,100,"Percent","6C10F1","","",1,0
+"~GEN-L Terminal","GEN-L","0x221110","Lookup(Bit(A:6)::0='On':1='OFF')",0,1,"Bit","6C10F1","","",1,0
+"~HO2S 1","HO2S 1","0x221145","(A*.005)-0.068",0,1,"Volts","6C10F1","","",1,0
+"~HO2S 2","HO2S 2","0x221146","(A*.005)-0.068",0,1,"Volts","6C10F1","","",1,0
+"~HO2S Heater(s) (bits 1&2)","HO2s Htrs","0x221112","Lookup(Bit(A:1)+Bit(A:2)::0='O2Htrs_OFF':1='O2Htr_ON':2='O2Htrs_ON')",0,100,"","6C10F1","","",1,0
+"~Ignition 1 Signal","Ign 1 Sig","0x221141","A/10",0,20,"Volts","6C10F1","","",1,0
+"~Key in Ignition","Ign_Key","0x222101","Lookup(Bit(A:0)::0='NO':1='YES')",0,1,"Bit Lookup","6C40F1","","",1,0
+"~Knock Retard","Knock Ret","0x2211a6","A/255*22.5",0,50,"Degrees","6C10F1","","",1,0
+"~Loop Status? (bit 0)","Loop","0x221120","Lookup(bit(A:0)::0='OPEN':1='CLOSED')",0,1,"","6C10F1","","",1,0
+"~Manifold Absolute Pressure Sensor in PSI","MAP Sensor","0x221142","A/255*5*2.74+1.5",0,15.19999981,"PSI","6C10F1","","",1,0
+"~Oil Pressure Switch (bit 2)","Oil Pr Sw","0x221102","Lookup(bit(A:2)::0='OK':1='LOW')",0,1,"","6C10F1","","",1,0
+"~Park/Neutral (pid 1100 bit 4)","Park/Neutral","0x221100","Lookup(bit(A:4)::1='P/N':0='OFF')",0,100,"","6C10F1","","",1,0
+"~Park/Neutral Switch (1131 bit 2)","P/N Sw","0x221131","Lookup(Bit(A:2)::0='INGEAR':1='P/N')",0,1,"","6C10F1","","",1,0
+"~Power Enrichment (bit 7)","Pwr Enr","0x221120","Lookup(Bit(A:7)::0='Inactive':1='Active')",0,100,"","6C10F1","","",1,0
+"~Stop Lamp Switch (bit 7)","Brake Sw","0x221116","Lookup(Bit(A:7)::0='Open':1='Closed')",0,1,"","6C10F1","","",1,0
+"~TCC Brake Switch (PID 1954 Bit 5)","TCC Brake","0x221954","Lookup(Bit(A:5)::0='Closed':1='Open')",0,1,"","6C10F1","","",1,0
+"~TCC Control (bit 6)","TCC_ON","0x221122","Bit(A:6)",0,1,"Bit","6C10F1","","",1,0
+"~TCC Enable (bit 5)","TCC_enabl","0x221121","BIT(A:5)",0,1,"Bit","6C10F1","","",1,0
+"~Total.Misfire Current?","Msfr_Curr","0x221200","A",0,10000,"","6C10F1","","",1,0
+"~TPS Sensor #1 %","TPS #1 %","0x2212b7","A",0,100,"Percent","6C10F1","","",1,0
+"~TPS Sensor #1 Volts","TPS #1 Volts","0x2212ba","(A/255)*5",0,10,"Volts","6C10F1","","",1,0
+"~TPS Sensor #2 %","TPS #2 %","0x2212b8","A",0,100,"Percent","6C10F1","","",1,0
+"~TPS Sensor #2 Volts","TPS #2 Volts","0x2212b9","(A/255)*5",0,10,"Volts","6C10F1","","",1,0
+"~Trans Gear by Solenoids (bits 1 & 2)","Sol_Gear","0x221954","Lookup(Bit(A:1)*2+Bit(A:0)::0='3rd':1='4th':2='2nd':3='1st')",0,100,"","6C10F1","","",1,0
+"~Trans Range ABCP","TransABCP","0x221951","Lookup(A-(A>5)*32: :6='0110':3='0011':10='1010':9='1001':0='0000':5='0101':12='1100':7='#0111#':1='#0001#':2='#0010#':4='#0100#':8='#1000#':11='#1011#':13='#1101#':14='#1110#':15='#1111#')",0,100,"BITS","6C10F1","","",1,0
+"~Transmission Range Display","Trans Display","0x221920","Lookup(A: :128='Park':64='Reverse':32='Nuetral':16='Drive':8='3rd':4='2nd':2='1st')",0,100,"","6C10F1","","",1,0
+"~TWC Temperature Calculated","TWC°F","0x2211a3","A*10",0,2550,"°F","6C10F1","","",1,0
