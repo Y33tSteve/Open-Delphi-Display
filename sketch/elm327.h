@@ -72,65 +72,37 @@ char HextoChar(uint8_t asciiCode) {
   else return '\0';//null-terminator
 }
 //----------------------------
-//function get VIN   Serial.println(getVIN(getPID(0902)));
-// Function to retrieve the complete VIN
 String retrieveVIN() {
-  // Step 1: Request PID 0902 to get the total number of frames needed for the VIN
-  String response0902 = getPID("0902"); // Ensure the argument is a string "0902"
-  response0902.trim();
-  
-  // Step 2: Parse the response to get the number of messages
-  if (response0902.length() == 0) {
-    Serial.println("No response for PID 0902");
-    return "Cannot read VIN";
+  String vin = "";
+  getPID("0902");           // Send the VIN request
+  delay(300);               // Wait for ELM327 to respond
+
+  unsigned long timeout = millis() + 1000;
+  while (millis() < timeout) {
+    if (SerialBT.available()) {
+      String line = SerialBT.readStringUntil('\r');
+      line.trim();
+
+      if (line.startsWith("49 02")) {
+        // Skip the first 3 bytes: 49 02 xx
+        for (int i = 6; i < line.length(); i += 3) {
+          if (i + 1 >= line.length()) break;
+          String hexByte = line.substring(i, i + 2);
+          char c = (char) strtol(hexByte.c_str(), NULL, 16);
+          vin += c;
+        }
+      }
+    }
   }
 
-  // Assume response format gives byte count or frames needed as first byte
-  int frameCount = strtol(response0902.substring(0, response0902.indexOf(' ')).c_str(), NULL, 16);
-  if (frameCount <= 0) {
-    Serial.println("Invalid frame count for VIN");
-    return "Cannot read VIN";
-  }
-
-  // Step 3: Request PID 0904 to get the actual VIN
-  String completeVIN = "";
-  for (int i = 0; i < frameCount; i++) {
-    String response0904 = getPID("0904"); // Request PID 0904
-    response0904.trim();
-    
-    // Step 4: Parse the response from PID 0904
-    completeVIN += getVIN(response0904); // Append the parsed VIN data to the complete VIN
-  }
-
-  // Remove any unnecessary characters or spaces from VIN
-  completeVIN.trim();
-  if (completeVIN.length() == 17) {
-    Serial.println("VIN: " + completeVIN);
-    return completeVIN; // Return the complete VIN
+  vin.trim();
+  if (vin.length() == 17) {
+    Serial.println("VIN: " + vin);
+    return vin;
   } else {
-    Serial.println("Incomplete VIN received");
+    Serial.println("Invalid VIN or timeout");
     return "Cannot read VIN";
   }
 }
 
-// Helper function to parse the response from PID 0904
-String getVIN(String elm_rsp) {
-  String VIN = "";
-  elm_rsp.trim();
-  
-  while (elm_rsp.length() > 0) {
-    int index = elm_rsp.indexOf(' ');
-    String getByte = (index == -1) ? elm_rsp : elm_rsp.substring(0, index);
-
-    if (getByte.indexOf(':') == -1 && getByte.length() == 2) { // Ignore headers and extract only data bytes
-      byte ascii = strtol(getByte.c_str(), NULL, 16);
-      VIN.concat(HextoChar(ascii)); // Convert the byte to a character
-    }
-    
-    elm_rsp = (index == -1) ? "" : elm_rsp.substring(index + 1);
-  }
-
-  return VIN;
-}//getVIN
-//----------------------------
 
